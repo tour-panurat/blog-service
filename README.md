@@ -1,3 +1,4 @@
+
 # Blog API and App
 
 This repository contains a Blog API and a corresponding frontend application. The API is built using Express and Prisma, and the frontend is built using Next.js. The application is set up to work with a PostgreSQL database.
@@ -10,6 +11,7 @@ This repository contains a Blog API and a corresponding frontend application. Th
 - [API Endpoints](#api-endpoints)
 - [Seeding the Database](#seeding-the-database)
 - [Docker](#docker)
+- [License](#license)
 
 ## Getting Started
 
@@ -37,6 +39,12 @@ cd blog-service
    docker-compose up --build
    ```
 
+3. Once the services are up, you can access them via the following URLs:
+
+   - **API Service**: [http://localhost:3001](http://localhost:3001)
+   - **API Documentation**: [http://localhost:3001/api-docs](http://localhost:3001/api-docs)
+   - **Frontend Application**: [http://localhost:3000](http://localhost:3000)
+
 ## API Endpoints
 
 - **GET /users**: Retrieve all users
@@ -62,8 +70,18 @@ This project includes a `docker-compose.yml` file for easy setup and deployment.
 - **api**: Backend API service
 - **app**: Frontend application
 
-Run `docker-compose up --build` to start all services.
+To start all services, run:
+
+```bash
+docker-compose up --build
+```
+
+### Accessing the Services
+
+- **API Service**: [http://localhost:3001](http://localhost:3001)
+- **API Documentation**: [http://localhost:3001/api-docs](http://localhost:3001/api-docs)
+- **Frontend Application**: [http://localhost:3000](http://localhost:3000)
 
 ## License
 
-This project is licensed under the Panurat License
+This project is licensed under the Panurat License.
