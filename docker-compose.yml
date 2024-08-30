@@ -1,0 +1,65 @@
+version: '3.8'
+
+services:
+  database:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: blog-bbl
+    ports:
+      - "5432:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    networks:
+      - blog-network
+
+  api:
+    build:
+      context: ./blog-api
+      dockerfile: Dockerfile
+    environment:
+      DATABASE_URL: postgres://postgres:postgres@database:5432/blog-bbl?schema=public
+      PORT: 3001
+      AUTH0_ISSUER_BASE_URL: https://dev-yg.us.auth0.com
+      AUTH0_AUDIENCE: H9F6QG5SzTKMv0tbmgxLj9LjG1EKVllA
+      SERVER_URL: http://localhost:3001
+    depends_on:
+      - database
+    ports:
+      - "3001:3001"
+    networks:
+      - blog-network
+    volumes:
+      - ./blog-api:/usr/src/app # Mount the source code for hot-reloading
+    command: >
+      sh -c "
+      npm run generate && 
+      npm run migrate:dev && 
+      npm run seed && 
+      npm run start
+      "
+
+  app:
+    build:
+      context: ./blog-app
+      dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_AUTH0_DOMAIN: https://dev-yg.us.auth0.com
+        NEXT_PUBLIC_AUTH0_CLIENT_ID: H9F6QG5SzTKMv0tbmgxLj9LjG1EKVllA
+        NEXT_PUBLIC_API_URL: http://localhost:3001
+    ports:
+      - "3000:3000"
+    depends_on:
+      - api
+    networks:
+      - blog-network
+    volumes:
+      - ./blog-app:/usr/src/app # Mount the source code for hot-reloading
+
+volumes:
+  db-data:
+
+networks:
+  blog-network:
+    driver: bridge
